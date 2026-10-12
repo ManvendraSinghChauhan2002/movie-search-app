@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        header{
+            background-color: aliceblue;
+            color: hsla(120, 25.14%, 45%, 1);
+            height: 200px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 35px;
+            padding: 15px;
+            
+        }
+
+        button{
+            font-size: 20px;
+            padding: 15px;
+            border-radius: 18px;
+            color: blue;
+        }
+input{
+    padding: 15px 75px;
+    color: darkslategrey;
+    font-size: 20px;
+      border-radius: 18px;
+}
+
+.container{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-auto-rows: 400px;
+    background-color: antiquewhite;
+    gap: 35px;
+    padding: 15px;
+   
+}
+.card{
+    background-color:darkred ;
+     border-radius: 18px;
+     color: white;
+     
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     line-height: 1.4;
+    
+}
+
+h4{
+     font-weight: 900;
+     font-size: 25px;
+}
+p{
+    font-size: 16px;
+    color: azure;
+}
+    .card img{
+        height: 300px;
+        width: 100%;
+      border-radius: 18px;
+    }
+    a{
+        height: 100%;
+        width: 100%;
+        color: white;
+        text-decoration: none;
+        text-align: center;
+          
+    }
+   
+
+    </style>
+</head>
+<body>
+    <header>
+        <div><h3>Movie Website</h3></div>
+        <div>
+       
+             <input type="text" name="" id="input" placeholder="Enter your movie..">
+            <button id="search">Search</button>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+          
+         
+        </div>
+       
+    </main>
+    <script>
+        async function moviefn() {
+            const containerVar=document.querySelector(".container");
+
+             const a= await fetch("https://api.tvmaze.com/shows");
+        // console.log(a);
+        const b= await a.json();
+        // console.log(b[0]);
+        for(let movie of b){
+            const cardVar=document.createElement("div");
+            cardVar.classList.add("card");
+           
+            cardVar.innerHTML=`<a href="${movie.url}"><img src=" ${movie.image.original}" alt="">
+            <div><h4>${movie.name} </h4> <p>${movie.genres}</p> <p>${movie.language}</p></div>
+            </a>`;
+              containerVar.append(cardVar);
+        }
+       
+
+        
+        }
+
+        moviefn();
+
+        async function moviefn2(query) {
+            const query2=query;
+            // console.log(query2);
+
+             const containerVar=document.querySelector(".container");
+
+            //  const a= await fetch("https://api.tvmaze.com/shows" );
+            const a= "https://api.tvmaze.com/search/shows";
+            // console.log(query);
+            //    console.log(a,+"?=",query);
+              
+           const b= await fetch(a);
+        
+        const c= await b.json();
+        console.log(c);
+         const total=`${a}?=${encodeURIComponent( query)}`;
+               console.log(total);
+        if(c[0].name===query){
+              
+            const cardVar=document.createElement("div");
+            cardVar.classList.add("card");
+           
+            cardVar.innerHTML=`<a href="${c[0].url}"><img src=" ${c[0].image.original}" alt="">
+            <div><h4>${c[0].name} </h4> <p>${c[0].genres}</p> <p>${c[0].language}</p></div>
+            </a>`;
+              containerVar.append(cardVar);
+
+        }
+      
+          
+        
+       
+
+        }
+
+
+        const searchVar=document.querySelector("#search");
+        const inputVar=document.querySelector("#input");
+        searchVar.addEventListener("click",(event)=>{
+            console.log("hello");
+          const query= "Under the Dome";
+                  moviefn2(query);
+        })
+      
+
+       
+        // const 
+    </script>
+</body>
+</html>
