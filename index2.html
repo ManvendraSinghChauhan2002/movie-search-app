@@ -23,6 +23,13 @@
             
         }
 
+        .heading{
+            color: darkorchid;
+          
+            margin-top:5px;
+            margin-left: 500px;
+        }
+
         button{
             font-size: 20px;
             padding: 15px;
@@ -34,6 +41,7 @@ input{
     color: darkslategrey;
     font-size: 20px;
       border-radius: 18px;
+      border: 1px solid black;
 }
 
 .container{
@@ -58,10 +66,15 @@ input{
     
 }
 
-h4{
+h3{
      font-weight: 900;
-     font-size: 25px;
+     font-size: 50px;
 }
+
+h4{
+    font-size: 25px;
+}
+
 p{
     font-size: 16px;
     color: azure;
@@ -85,7 +98,7 @@ p{
 </head>
 <body>
     <header>
-        <div><h3>Movie Website</h3></div>
+        <div class="heading"><h3>Movie Website</h3></div>
         <div>
        
              <input type="text" name="" id="input" placeholder="Enter your movie..">
@@ -101,8 +114,12 @@ p{
        
     </main>
     <script>
+        const inputVar=document.querySelector("#input");
+        const buttonVar=document.querySelector("#search")
+          const containerVar=document.querySelector(".container");
+
         async function moviefn() {
-            const containerVar=document.querySelector(".container");
+         
 
              const a= await fetch("https://api.tvmaze.com/shows");
         // console.log(a);
@@ -124,53 +141,56 @@ p{
 
         moviefn();
 
-        async function moviefn2(query) {
-            const query2=query;
-            // console.log(query2);
 
-             const containerVar=document.querySelector(".container");
+         async function moviefn2(movie_name) {
+            containerVar.innerHTML="";
+          
 
-            //  const a= await fetch("https://api.tvmaze.com/shows" );
-            const a= "https://api.tvmaze.com/search/shows";
-            // console.log(query);
-            //    console.log(a,+"?=",query);
-              
-           const b= await fetch(a);
-        
-        const c= await b.json();
-        console.log(c);
-         const total=`${a}?=${encodeURIComponent( query)}`;
-               console.log(total);
-        if(c[0].name===query){
-              
-            const cardVar=document.createElement("div");
+             const a= await fetch("https://api.tvmaze.com/shows");
+        // console.log(a);
+        const b= await a.json();
+
+        // console.log(b[0]);
+        for(let movie of b){
+            // console.log(movie.name);
+            // console.log(movie_name);
+            if(movie.name===movie_name){
+                  const cardVar=document.createElement("div");
             cardVar.classList.add("card");
            
-            cardVar.innerHTML=`<a href="${c[0].url}"><img src=" ${c[0].image.original}" alt="">
-            <div><h4>${c[0].name} </h4> <p>${c[0].genres}</p> <p>${c[0].language}</p></div>
+            cardVar.innerHTML=`<a href="${movie.url}"><img src=" ${movie.image.original}" alt="">
+            <div><h4>${movie.name} </h4> <p>${movie.genres}</p> <p>${movie.language}</p></div>
             </a>`;
+            console.log(cardVar);
               containerVar.append(cardVar);
-
-        }
-      
+            }
           
+        }
+       
+
+        
+        }
+
+     
+            buttonVar.addEventListener("click",()=>{
+                 const movie_name= inputVar.value;
+                 console.log(movie_name);
+                 moviefn2(movie_name);
+            })
+          
+       
+
+        inputVar.addEventListener("keyup",(event)=>{
+           if(event.key==="Enter"){
+            console.log(inputVar.value);
+           }
+                  
+            
+          
+        })
+
         
        
-
-        }
-
-
-        const searchVar=document.querySelector("#search");
-        const inputVar=document.querySelector("#input");
-        searchVar.addEventListener("click",(event)=>{
-            console.log("hello");
-          const query= "Under the Dome";
-                  moviefn2(query);
-        })
-      
-
-       
-        // const 
     </script>
 </body>
 </html>
